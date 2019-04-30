@@ -24,8 +24,13 @@ def main():
                 json_response = response_geo.json()
                 toponym = json_response["response"]["GeoObjectCollection"]["featureMember"]
                 if toponym:
-                    city_ans = toponym[0]['GeoObject']['name']
-                    answer = toponym[0]['GeoObject']['description']
+                    city_ans = toponym[0]['GeoObject']['name'].split()
+                    a = []
+                    for i in city_ans:
+                        if i not in ['город', 'Город']:
+                            a.append(i)
+                    city_ans = ' '.join(a.copy())
+                    answer = toponym[0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['Components'][0]['name']
                     send_mess(get_chat_id(incomming), 'Город {} находится в стране {}'.format(city_ans, answer), url)
                 else:
                     send_mess(get_chat_id(incomming), 'Что-то я не знаю такого города', url)
